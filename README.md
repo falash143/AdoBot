@@ -1,85 +1,82 @@
-# AdoBot
-
-Opensource Android Spyware
-
-# Features
- - Realtime command execution
- - Schedule commands
- - Hidden app icon (stealth mode)
- - Fetch SMS in
- - Fetch call logs
- - Fetch contacts
- - Send SMS command
- - Forward received/sent SMS
- - Monitor location
- - Update apk remotely
- - Data collected are retained in database
- - Realtime notifications about device status
- - Transfer bot reporting to another server
- - For android 6 and above:
-   - You can view the permissions of the app
-   - The app asks for permission when a certain command is sent the there is no permission
-
-# Need help/Todo
-- access files
-- take photo stealthly
-- get browser history
-- and more...
-
-# Instructions
-
-Just compile (as signed APK) and install the app to the victim's android device. Then start the app and configure the parameters:
-
-- ***Server URL:*** Set the URL of your [AdoBot-IO](https://github.com/adonespitogo/AdoBot-IO) server. It must include the protocol i.e. `https://adobot.herokuapp.com` (default).
-- ***SMS Open Command:*** Send an SMS to any number containing this text to open the Adobot settings. "Open adobot" (default).
-- ***Force Command:*** Send an SMS containing this text to the victim's phone to forcefully sync data to server. "Baby?" (default).
-
-Next go to [https://github.com/adonespitogo/AdoBot-IO](https://github.com/adonespitogo/AdoBot-IO) and follow the instructions on setting up the admin panel.
-
-# Management Console Screen Shots
-
-## Main GUI
-
-![Adobot Main GUI](./screenshots/main.png "Adobot Main GUI")
-
-## Location Tab
-
-![Location Tab](./screenshots/location.png "Adobot Location Tab")
-
-## Main SMS Tab
-
-![Main SMS Tab](./screenshots/sms-main-1.png "Adobot Main SMS Tab")
-
-## Single SMS Thread View
-
-SMS thread is a pop up modal
-
-![SMS Thread Tab](./screenshots/sms-thread-5.png "Adobot SMS Thread Tab")
-
-## Call Logs Tab
-
-![Call Logs Tab](./screenshots/call-logs.png "Adobot Call Logs Tab")
-
-## Contacts Tab
-
-![Contacts Tab](./screenshots/contacts.png "Adobot Contacts Tab")
-
-## Pending Commands Tab
-
-When you send a command to an offline device, the command is stored in the datase and will be executed once the device connects online.
-
-![Pending commands Tab](./screenshots/pending-commands.png "Adobot Pending Commands Tab")
-
-## Update APK 
-
-![Update APK](./screenshots/update-apk.png "Adobot update APK")
+# AdoBot-IO
+[AdoBot](https://github.com/adonespitogo/AdoBot) Android Spyware Server
 
 
-## Notifications
+# Server Setup
 
-![Notification](./screenshots/notifications/notif2.png "Adobot notification")
-![Notification](./screenshots/notifications/notif3.png "Adobot notification")
+## Create app on Heroku
+ - Sign up to [Heroku](http://heroku.com) 
+ - Create a new app (Click the `New` button in the top right of the dashboard)
+ - Name your app to whatever you want. Let's name it `your-app` for example purposes
+ 
+## Setup Mysql Server
+ - Go to "Resources" tab
+ - In the "Addons" section, type "ClearDB" and select the first suggestion
+ - Click `Provision` when prompted
+ 
+## Configure the app
+ - Go to the settings tab of your new heroku app
+ - Click `Reveal Config Vars` button
+ - Copy the VALUE of `CLEARDB_DATABASE_URL` KEY
+ - Create a new KEY named `DATABASE_URL` and the paste into the `VALUE` field the value from `CLEARDB_DATABASE_URL`. Click `ADD` to save.
+ - Create a new KEY named `ADMIN_USERNAME` and the VALUE will be your desired username used to login into the panel later. Then click `ADD` button
+ - Create a new KEY named `ADMIN_PASSWORD` and the VALUE will be your desired password used to login into the panel later. Then click `ADD` button
 
-## License
+## Upload the source to Heroku
+ - Download and install Heroku CLI as outlined [here](https://devcenter.heroku.com/articles/heroku-command-line)
+ - If you don't have git command line tool, you might as well [install](https://git-scm.com/downloads) it
+ - After installation of Heroku CLI, open command line and type:
+```
+$ heroku login
+```
+   Enter your Heroku login email and password
+ - Go back to Heroku "Settings" tab
+ - Find the "Info" section and copy the `Heroku Git URL` field. It looks like `https://git.heroku.com/your-app.git`
+ - Download this repository (AdoBot-IO) and extract the contents of the zip file
+ - Then `cd` into the the extracted directory. ex `cd ~/Downloads/AdoBot-IO`
+ - Then enter the commands below (Remember to change `your-app` to the name of your app)
+```
+$ git init
+$ git remote add heroku https://git.heroku.com/your-app.git
+$ git add .
+$ git commit -am "initial commit"
+$ git push heroku master
+$ heroku open
+```
+  - That's it, your  done! Now set up the [AdoBot](https://github.com/adonespitogo/AdoBot) android client if you haven't done it yet.
+
+# Development
+
+## System Requirements
+
+- NodeJS
+- MySql
+
+## Setup
+
+Edit `./config/config.json` to your preferences. In the `development` section, change the username, password and name of the database.
+
+The `admin` section refers to the admin panel login credentials in development environment.
+
+To set the admin panel username and password in production, set the environment variables `ADMIN_USERNAME` and `ADMIN_PASSWORD`.
+
+Install dependencies:
+
+```
+$ npm install
+```
+Populate the database:
+```
+$ ./node_modules/.bin/sequelize db:migrate
+```
+
+Run local server
+```
+$ npm run dev
+```
+Browse to http://127.0.0.1:3000
+
+# License
 
 Released under [MIT License](./MIT-License.txt)
+
